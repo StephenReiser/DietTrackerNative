@@ -6,7 +6,13 @@
  * @flow
  */
 
-const baseURL = 'http://localhost:3000'
+let baseURL = ''
+
+if (process.env.NODE_ENV === 'development') {
+  baseURL = 'http://localhost:3000'
+} else {
+  baseURL = 'https://thawing-sierra-68164.herokuapp.com'
+}
 
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, Button, Alert, FlatList} from 'react-native';
@@ -77,6 +83,7 @@ class Home extends Component {
     // this.handleSubmit = this.handleSubmit.bind(this)
     // this.login = this.login.bind(this)
     this.getUser = this.getUser.bind(this)
+    this.handleAdd = this.handleAdd.bind(this)
   }
   
 
@@ -184,7 +191,98 @@ class Home extends Component {
     })
   }
 
+  handleAdd = (userInfo) => {
+    // event.preventDefault()
+    const user = {
+      "user": {
+        email: userInfo.email,
+        password: userInfo.password,
+        password_confirmation: userInfo.password_confirmation,
+        
+    }}
+// console.log(user)
+    fetch(baseURL + '/users/', {
+      body: JSON.stringify(user),
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      }
+    })
+    .then (createdUser => {
+      const email = userInfo.email
+    const password = userInfo.password
+    const request = {"auth": {"email": email, "password": password}}
+    fetch(baseURL + "/user_token", {
+      body: JSON.stringify(request),
+      method: "POST",
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'}
+    })
+    .then(response => response.json())
+    .then((result) => {
+      this.setState({
+        token: result.jwt,
+        email: userInfo.email
+      })
+      return result
+    }
+      ).then(result => {
+        let token = "Bearer " + result.jwt
+      console.log(token)
+      const email = userInfo.email
+      fetch(baseURL + '/users', {
+        method: "GET",
+        headers: {
+      "Authorization": token
+    }
+      })
+      .then(response => response.json()).then((json) => {
+          // return this.setState({
+          // userMeals:json
+          // const user = json.filter(user => user.email === this.state.loginEmail)
+          // return console.log(user)
+          // // }
+          // )
+          // console.log(this.state.loginEmail)
+          console.log(json)
+          const user = json.filter(user => {
+           return  user.email === email
+          })
+          console.log(user)
+          return this.setState({
+            currentUserId: user[0].id,
+            loggedIn: true,
+            currentUser: this.state.email
+          })
+        })
+      .catch(error => console.error(error))
+      
+      })
+      
+      .then(loggedIn => this.props.navigation.navigate('Home'))
+    
+    // .then(() => {
+    //   return this.setState({
+    //     currentUser: email,
+    //     loginEmail: '',
+    //     loginPassword: '',
+    //     loggedIn: true,
+    //     currentUserId: this.state.tempID
+    //   })
+    // })
+    .catch(error => console.log(error))
+  // realistically should set state here to be like incorrect credentials, and then render a new view
   
+  
+  
+
+    }).then(() => {
+      return console.log('test')
+    })
+    .catch(error => console.log(error))
+  }
 
 
   render() {
@@ -204,7 +302,13 @@ class Home extends Component {
         options = {formOptions} />
         }
         {this.state.loggedIn ? <Button title="Logout" onPress = {this.logOut.bind(this)} /> :   
-        <Button title="Login" onPress = {this.login.bind(this)} />}
+        <Button title="Login" onPress = {this.login.bind(this)} />} 
+
+
+        <Button title="Signup" onPress = {() => this.props.navigation.navigate('SignUp', {
+          add: this.handleAdd
+                })}/>
+        
         
         {/* <Text>{this.state.token}</Text> */}
         {/* <Button title='getMeals' onPress = {this.getMeals.bind(this)}/> */}

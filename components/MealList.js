@@ -23,7 +23,13 @@ import Chart from 'react-native-chartjs';
 // });
 
 
-const baseURL = 'http://localhost:3000'
+let baseURL = ''
+
+if (process.env.NODE_ENV === 'development') {
+  baseURL = 'http://localhost:3000'
+} else {
+  baseURL = 'https://thawing-sierra-68164.herokuapp.com'
+}
 
 const chartConfiguration = {
   type: 'bar',
