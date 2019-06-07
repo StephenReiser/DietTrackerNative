@@ -304,10 +304,10 @@ class Home extends Component {
         {this.state.loggedIn ? <Button title="Logout" onPress = {this.logOut.bind(this)} /> :   
         <Button title="Login" onPress = {this.login.bind(this)} />} 
 
-
+        {this.state.loggedIn ? null : 
         <Button title="Signup" onPress = {() => this.props.navigation.navigate('SignUp', {
           add: this.handleAdd
-                })}/>
+                })}/>}
         
         
         {/* <Text>{this.state.token}</Text> */}
