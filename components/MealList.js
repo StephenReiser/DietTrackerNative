@@ -22,14 +22,14 @@ import Chart from 'react-native-chartjs';
 //   // terms: t.Boolean
 // });
 
+let baseURL = 'https://thawing-sierra-68164.herokuapp.com'
+// let baseURL = ''
 
-let baseURL = ''
-
-if (process.env.NODE_ENV === 'development') {
-  baseURL = 'http://localhost:3000'
-} else {
-  baseURL = 'https://thawing-sierra-68164.herokuapp.com'
-}
+// if (process.env.NODE_ENV === 'development') {
+//   baseURL = 'http://localhost:3000'
+// } else {
+//   baseURL = 'https://thawing-sierra-68164.herokuapp.com'
+// }
 
 const chartConfiguration = {
   type: 'bar',
@@ -226,8 +226,7 @@ class MealList extends Component {
                 toggleAdd: !this.state.toggleAdd
                 //  Probably shoudl set state here with the new sickString
               })
-            })
-            .catch(error => console.log(error))
+            }).then(loggedIn => this.props.navigation.navigate('Home')).catch(error => console.log(error))
           }
           toggleEdit = (meal) => {
              this.setState({
@@ -283,40 +282,49 @@ class MealList extends Component {
 
     render() {
       const { navigation } = this.props;  
-      return(
+      return[
+        
+            <View style={styles.buttonRow}>
+            {/* {this.props.loggedIn ? <Button title="Log Meal" onPress = {this.toggleAdd.bind(this)} /> : null } */}
+              
+            <Button color="#F7F7F7" title='New Meal' onPress={() =>
+                this.props.navigation.navigate('AddMeal', {
+                handleAdd: this.handleAdd
+                })}/>
+                
 
-            <View>
-            {this.props.loggedIn ? <Button title="Log Meal" onPress = {this.toggleAdd.bind(this)} /> : null }
-
-            
             {/* <Chart chartConfiguration = {
             this.state.chartConfiguration
           }
        defaultFontSize={20}/>   */}
+              
 
-                <Button title='Chart' onPress={() =>
+                <Button color="#F7F7F7" title='Chart' onPress={() =>
                 this.props.navigation.navigate('Chart', {
                 sickArray: this.state.sickArray
                 })}/>
+                
+            </View>,
+            <View>
             
-            
+{this.state.userMeals.length < 1 ? <Text style={styles.welcome}>Welcome to your personalized Food Tracker, click on the 'New meal' button to add your most recent meal or snack. Be sure to add  all food items you ate. Forgot something? You can always go back and edit your meal! Once you log a new meal or snack, the chart of your top 10 triggers will update.</Text> : 
+
+        
 
 
-            {/* {this.state.toggleEdit ? <Edit meal = {this.state.currentMeal}/> : null} */}
-{/* probably need to wrap something in a component */}
-            {this.state.toggleAdd ? 
-           <Addnew handleAdd = {this.handleAdd}/>
-            : 
-            <FlatList 
-            data={this.state.userMeals}
-            showsVerticalScrollIndicator={false}
-            renderItem={({item}) =>
+            
+              <FlatList 
+                data={this.state.userMeals}
+                showsVerticalScrollIndicator={false}
+                renderItem={({item}) => [
                 <View style={item.sick ? styles.sad : styles.happy}>
             
                 <Text style={styles.name}>{item.title}{"\n"}</Text>
-                <Text style={styles.email}>{item.food_name}{"\n"}</Text>
-                <Text style={styles.email}>{item.sick ? 'This made you sick' : "this didn't make you sick"}</Text>
-            
+                <Text style={styles.email}>{item.sick ? 'This made you sick' : "This didn't make you sick"}{"\n"}</Text>
+                <Text style={styles.email}>You ate: {item.food_name}{"\n"}</Text>
+                <Text style={styles.email}>Comments: {item.comments}{"\n"}</Text>
+                </View>
+                ,<View style ={item.sick ? styles.sadButton : styles.happyButton}>            
                 <Button title='toggle sick' onPress={() => this.toggleSick(item, this.props.currentUserId)}/>
                 <Button title='delete' onPress={() => this.handleDelete(item)}/>
                 <Button title='edit' onPress={() =>
@@ -324,12 +332,12 @@ class MealList extends Component {
                 meal: item, handleEdit: this.handleEdit
                 })}/>
                 
-                </View>
+                </View>]
             }
             keyExtractor={item => item.id}
-             />}
+          /> }
              </View>
-        )
+      ]
     }
 }
 
@@ -355,22 +363,60 @@ const styles = StyleSheet.create({
     },
     name: {
       fontFamily: 'Verdana',
-      fontSize: 18
+      fontSize: 16,
+      color: '#303030'
     },
     email: {
-      color: 'white'
+      color: '#303030'
     },
     sad: {
-      backgroundColor: 'red',
+      backgroundColor: '#FFA60080',
       justifyContent: 'center',
-      paddingTop: 30,
-      borderRadius: 2,
+      marginTop: 3,
+      // paddingTop: 8,
+      // paddingBottom: 8,
+      // paddingLeft: 5,
+      // paddingRight: 5
+      padding: 8
+      // borderRadius: 5,
+      // marginBottom: 20
       
     },
     happy: {
-      backgroundColor: 'green',
+      backgroundColor: '#009BA555',
       justifyContent: 'center',
-      paddingTop: 30,
-      borderRadius: 2,
+      // paddingTop: 30,
+      // paddingBottom: 8,
+      padding: 8,
+      marginTop: 3,
+      // borderRadius: 5,
+      // marginBottom: 20
+    },
+    buttonRow: {
+      // flex: 1,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      backgroundColor: '#303030',
+      
+    },
+    indButton: {
+      borderStyle: 'solid',
+      borderColor: 'black',
+      borderWidth: 5
+    },
+    sadButton: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginBottom: 20,
+      backgroundColor: '#FFA600CC',
+    },
+    happyButton: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginBottom: 20,
+      backgroundColor: '#009BA5B3',
+    },
+    welcome: {
+      padding: 10,
     }
   });

@@ -6,18 +6,20 @@
  * @flow
  */
 
-let baseURL = ''
+let baseURL = 'https://thawing-sierra-68164.herokuapp.com'
+// let baseURL = ''
 
-if (process.env.NODE_ENV === 'development') {
-  baseURL = 'http://localhost:3000'
-} else {
-  baseURL = 'https://thawing-sierra-68164.herokuapp.com'
-}
+// if (process.env.NODE_ENV === 'development') {
+//   baseURL = 'http://localhost:3000'
+// } else {
+//   baseURL = 'https://thawing-sierra-68164.herokuapp.com'
+// }
 
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, Button, Alert, FlatList} from 'react-native';
 import t from 'tcomb-form-native'; // 0.6.9
 import MealList from './MealList'
+
 import { createStackNavigator, createAppContainer, withNavigation } from 'react-navigation';
 
 const Form = t.form.Form;
@@ -328,9 +330,9 @@ export default withNavigation(Home)
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
-    marginTop: 50,
+    marginTop: 20,
     padding: 20,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#F7F7F7',
   },
   flatview: {
     justifyContent: 'center',
@@ -345,11 +347,11 @@ const styles = StyleSheet.create({
     color: 'white'
   },
   sad: {
-    backgroundColor: 'red',
+    backgroundColor: '#FFA60080',
     
   },
   happy: {
-    backgroundColor: 'green',
+    backgroundColor: '#009BA555',
     
   }
 });

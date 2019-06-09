@@ -1,10 +1,12 @@
-let baseURL = ''
+let baseURL = 'https://thawing-sierra-68164.herokuapp.com'
 
-if (process.env.NODE_ENV === 'development') {
-  baseURL = 'http://localhost:3000'
-} else {
-  baseURL = 'https://thawing-sierra-68164.herokuapp.com'
-}
+// let baseURL = ''
+
+// if (process.env.NODE_ENV === 'development') {
+//   baseURL = 'http://localhost:3000'
+// } else {
+//   baseURL = 'https://thawing-sierra-68164.herokuapp.com'
+// }
 
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, Button, Alert, FlatList} from 'react-native';
@@ -46,7 +48,7 @@ class SignUp extends Component {
         const { navigation } = this.props;
         const add = navigation.getParam('add', 'add')
         return(
-            <View>
+            <View style={styles.container}>
             <Form 
             ref={c => this._form = c}
             type={User}
@@ -60,13 +62,13 @@ class SignUp extends Component {
 }
 export default withNavigation(SignUp)
 
-// const styles = StyleSheet.create({
-//   container: {
-//     justifyContent: 'center',
-//     marginTop: 50,
-//     padding: 20,
-//     backgroundColor: '#ffffff',
-//   },
+const styles = StyleSheet.create({
+  container: {
+    justifyContent: 'center',
+    marginTop: 50,
+    padding: 20,
+    backgroundColor: '#ffffff',
+  }})
 //   flatview: {
 //     justifyContent: 'center',
 //     paddingTop: 30,

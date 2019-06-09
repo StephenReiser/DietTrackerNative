@@ -6,13 +6,14 @@
  * @flow
  */
 
-let baseURL = ''
+let baseURL = 'https://thawing-sierra-68164.herokuapp.com'
+// let baseURL = ''
 
-if (process.env.NODE_ENV === 'development') {
-  baseURL = 'http://localhost:3000'
-} else {
-  baseURL = 'https://thawing-sierra-68164.herokuapp.com'
-}
+// if (process.env.NODE_ENV === 'development') {
+//   baseURL = 'http://localhost:3000'
+// } else {
+//   baseURL = 'https://thawing-sierra-68164.herokuapp.com'
+// }
 
 import React from 'react';
 import {Platform, StyleSheet, Text, View, Button, Alert, FlatList} from 'react-native';
@@ -22,6 +23,7 @@ import HomeScreen from './components/Home'
 import EditMeal from './components/Edit'
 import FoodChart from './components/FoodChart'
 import SignUpPage from './components/SignUp'
+import Addnew from './components/Addnew'
 import { createStackNavigator, createAppContainer } from "react-navigation";
 
 
@@ -251,6 +253,9 @@ const AppNavigator = createStackNavigator({
   },
   SignUp: {
     screen: SignUpPage
+  },
+  AddMeal: {
+    screen: Addnew
   }
 });
 
